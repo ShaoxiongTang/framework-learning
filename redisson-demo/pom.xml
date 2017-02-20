@@ -17,5 +17,10 @@
             <artifactId>redisson</artifactId>
             <version>3.2.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+        </dependency>
     </dependencies>
 </project>
