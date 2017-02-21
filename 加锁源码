@@ -1,0 +1,50 @@
+public void lockInterruptibly(long leaseTime, TimeUnit unit) throws InterruptedException {
+    long threadId = Thread.currentThread().getId();
+    Long ttl = tryAcquire(leaseTime, unit, threadId); 
+    // 成功获取锁
+    if (ttl == null) {
+        return;
+    }
+
+	// 需要等待 subscribe 锁名称
+    RFuture<RedissonLockEntry> future = subscribe(threadId);
+	// 订阅 uuid:thread_id channel 成功则进入循环
+    commandExecutor.syncSubscription(future); 
+
+    try {
+        while (true) {
+			// 尝试获取锁
+            ttl = tryAcquire(leaseTime, unit, threadId);
+            // 加锁成功
+            if (ttl == null) {
+                break;
+            }
+
+            if (ttl >= 0) { // 在本地Semaphore上等待 ttl 时间
+                getEntry(threadId).getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS); 
+            } else {
+                getEntry(threadId).getLatch().acquire();  // 尝试获取锁
+            }
+        }
+    } finally {
+        unsubscribe(future, threadId); // 获取锁成功取消 subscribe
+    }
+}
+
+<T> RFuture<T> tryLockInnerAsync(long leaseTime, TimeUnit unit, long threadId, RedisStrictCommand<T> command) {
+    internalLockLeaseTime = unit.toMillis(leaseTime);
+
+    return commandExecutor.evalWriteAsync(getName(), LongCodec.INSTANCE, command,
+              "if (redis.call('exists', KEYS[1]) == 0) then " +
+                  "redis.call('hset', KEYS[1], ARGV[2], 1); " +
+                  "redis.call('pexpire', KEYS[1], ARGV[1]); " +
+                  "return nil; " +
+              "end; " +
+              "if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then " +
+                  "redis.call('hincrby', KEYS[1], ARGV[2], 1); " +
+                  "redis.call('pexpire', KEYS[1], ARGV[1]); " +
+                  "return nil; " +
+              "end; " +
+              "return redis.call('pttl', KEYS[1]);",
+                Collections.<Object>singletonList(getName()), internalLockLeaseTime, getLockName(threadId));
+}

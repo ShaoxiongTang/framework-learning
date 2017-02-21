@@ -13,11 +13,22 @@
         <java_source_version>1.6</java_source_version>
         <java_target_version>1.6</java_target_version>
         <maven_compiler_plugin.version>3.1</maven_compiler_plugin.version>
+
     </properties>
 
     <modules>
         <module>redisson-demo</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>downloadSources</id>
+            <properties>
+                <downloadSources>true</downloadSources>
+                <downloadJavadocs>true</downloadJavadocs>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
@@ -27,8 +38,16 @@
                 <artifactId>commons-configuration</artifactId>
                 <version>1.10</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>19.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+
 
     <build>
         <plugins>
@@ -41,6 +60,8 @@
                     <target>${java_target_version}</target>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
 
