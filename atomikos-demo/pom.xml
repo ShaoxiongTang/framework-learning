@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>framework-learning</artifactId>
+        <groupId>com.xiaomi.be</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>atomikos-demo</artifactId>
+    <packaging>jar</packaging>
+
+    <name>atomikos-demo</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <atomikos.version>4.0.4</atomikos.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.xiaomi.be</groupId>
+            <artifactId>oc-web.common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.be</groupId>
+            <artifactId>oc-web.service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.be</groupId>
+            <artifactId>oc-web.test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-jta</artifactId>
+            <version>${atomikos.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-jdbc</artifactId>
+            <version>${atomikos.version}</version>
+        </dependency>
+    </dependencies>
+</project>

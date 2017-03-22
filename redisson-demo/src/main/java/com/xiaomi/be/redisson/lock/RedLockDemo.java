@@ -1,6 +1,5 @@
 package com.xiaomi.be.redisson.lock;
 
-import com.google.common.collect.ImmutableMap;
 import com.xiaomi.be.redisson.RedissonManager;
 import org.redisson.RedissonRedLock;
 import org.redisson.api.RLock;

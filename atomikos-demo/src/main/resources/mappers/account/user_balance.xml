@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.be.mapper.account.UserBalanceMapper">
+    
+    <resultMap id="userBalanceResultMap" type="UserBalanceEntity">
+        <result column="user_id" property="userId" />
+        <result column="usable_balance" property="usableBalance" />
+        <result column="frozen_balance" property="frozenBalance" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <sql id="orderby">
+        <if test='_orderby != null'>
+            order by
+            <foreach collection="_orderby" item="item" index="index" separator=",">
+                ${item}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="limit">
+        <if test='page != null and pageSize != null'>
+            limit #{page}, #{pageSize}
+        </if>
+
+        <if test='page == null and pageSize != null'>
+            limit #{pageSize}
+        </if>
+    </sql>
+
+    <sql id="fields">
+        `user_id`, `usable_balance`, `frozen_balance`, `create_time`
+    </sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="userId != null">
+                and `user_id` = #{userId}
+            </if>
+            <if test="usableBalance != null">
+                and `usable_balance` = #{usableBalance}
+            </if>
+            <if test="frozenBalance != null">
+                and `frozen_balance` = #{frozenBalance}
+            </if>
+            <if test="createTime != null">
+                and `create_time` = #{createTime}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="sets">
+        <set>
+            <if test="usableBalance != null">
+                `usable_balance` = #{usableBalance},
+            </if>
+            <if test="frozenBalance != null">
+                `frozen_balance` = #{frozenBalance},
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="queryById">
+        <where>
+            `user_id` = #{userId}
+        </where>
+    </sql>
+
+    <!-- 新增记录 -->
+    <insert id="insert" parameterType="UserBalanceEntity">
+        insert into user_balance (
+        <trim suffixOverrides=",">
+            <if test="userId != null">
+                `user_id`,
+            </if>
+            <if test="usableBalance != null">
+                `usable_balance`,
+            </if>
+            <if test="frozenBalance != null">
+                `frozen_balance`,
+            </if>
+            <if test="createTime != null">
+                `create_time`,
+            </if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="usableBalance != null">
+                #{usableBalance},
+            </if>
+            <if test="frozenBalance != null">
+                #{frozenBalance},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+        )
+        <selectKey keyProperty="userId" resultType="long">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+
+    <!-- 根据条件更新记录 -->
+    <update id="update" parameterType="UserBalanceEntity">
+        update user_balance <include refid="sets"/> <include refid="queryById"/>
+    </update>
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete">
+        delete from user_balance <include refid="queryById"/>
+    </delete>
+
+    <!-- 根据主键查询记录 -->
+    <select id="query" resultMap="userBalanceResultMap">
+        select <include refid="fields"/> from user_balance <include refid="queryById"/> limit 1
+    </select>
+
+    <!-- 根据条件查询记录 -->
+    <select id="queryListByConditions" parameterType="BasicQuery" resultMap="userBalanceResultMap">
+        select <include refid="fields"/> from user_balance <include refid="conditions"/> <include refid="orderby"/> <include refid="limit"/>
+    </select>
+
+    <!-- 根据条件查询记录数 -->
+    <select id="queryCountByConditions" parameterType="BasicQuery" resultType="long">
+        select count(*) from user_balance <include refid="conditions"/>
+    </select>
+
+    <!-- 以上是工具生成的内容，请勿更改 -->
+
+</mapper>

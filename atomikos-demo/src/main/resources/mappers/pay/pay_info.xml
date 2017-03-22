@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.be.mapper.pay.PayInfoMapper">
+    
+    <resultMap id="payInfoResultMap" type="PayInfoEntity">
+        <result column="pay_id" property="payId" />
+        <result column="pay_mode" property="payMode" />
+        <result column="order_id" property="orderId" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <sql id="orderby">
+        <if test='_orderby != null'>
+            order by
+            <foreach collection="_orderby" item="item" index="index" separator=",">
+                ${item}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="limit">
+        <if test='page != null and pageSize != null'>
+            limit #{page}, #{pageSize}
+        </if>
+
+        <if test='page == null and pageSize != null'>
+            limit #{pageSize}
+        </if>
+    </sql>
+
+    <sql id="fields">
+        `id`, `pay_id`, `pay_mode`, `order_id`, `create_time`
+    </sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="id != null">
+                and `id` = #{id}
+            </if>
+            <if test="payId != null">
+                and `pay_id` = #{payId}
+            </if>
+            <if test="payMode != null">
+                and `pay_mode` = #{payMode}
+            </if>
+            <if test="orderId != null and orderId != ''">
+                and `order_id` = #{orderId}
+            </if>
+            <if test="createTime != null">
+                and `create_time` = #{createTime}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="sets">
+        <set>
+            <if test="payId != null">
+                `pay_id` = #{payId},
+            </if>
+            <if test="payMode != null">
+                `pay_mode` = #{payMode},
+            </if>
+            <if test="orderId != null and orderId != ''">
+                `order_id` = #{orderId},
+            </if>
+            <if test="createTime != null">
+                `create_time` = #{createTime},
+            </if>
+        </set>
+    </sql>
+
+    <sql id="queryById">
+        <where>
+            `id` = #{id}
+        </where>
+    </sql>
+
+    <!-- 新增记录 -->
+    <insert id="insert" parameterType="PayInfoEntity">
+        insert into pay_info (
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                `id`,
+            </if>
+            <if test="payId != null">
+                `pay_id`,
+            </if>
+            <if test="payMode != null">
+                `pay_mode`,
+            </if>
+            <if test="orderId != null">
+                `order_id`,
+            </if>
+            <if test="createTime != null">
+                `create_time`,
+            </if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="payId != null">
+                #{payId},
+            </if>
+            <if test="payMode != null">
+                #{payMode},
+            </if>
+            <if test="orderId != null">
+                #{orderId},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+        )
+        <selectKey keyProperty="id" resultType="long">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+
+    <!-- 根据条件更新记录 -->
+    <update id="update" parameterType="PayInfoEntity">
+        update pay_info <include refid="sets"/> <include refid="queryById"/>
+    </update>
+
+    <!-- 根据主键删除记录 -->
+    <delete id="delete">
+        delete from pay_info <include refid="queryById"/>
+    </delete>
+
+    <!-- 根据主键查询记录 -->
+    <select id="query" resultMap="payInfoResultMap">
+        select <include refid="fields"/> from pay_info <include refid="queryById"/> limit 1
+    </select>
+
+    <!-- 根据条件查询记录 -->
+    <select id="queryListByConditions" parameterType="BasicQuery" resultMap="payInfoResultMap">
+        select <include refid="fields"/> from pay_info <include refid="conditions"/> <include refid="orderby"/> <include refid="limit"/>
+    </select>
+
+    <!-- 根据条件查询记录数 -->
+    <select id="queryCountByConditions" parameterType="BasicQuery" resultType="long">
+        select count(*) from pay_info <include refid="conditions"/>
+    </select>
+
+    <!-- 以上是工具生成的内容，请勿更改 -->
+
+</mapper>
