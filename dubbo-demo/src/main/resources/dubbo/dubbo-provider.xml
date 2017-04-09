@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd        
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <dubbo:service interface="com.xiaomi.be.OrderGetService" ref="orderGetServiceImpl" timeout="60000"/>
+
+    <!--http 接口-->
+    <dubbo:protocol id="owl-http" name="json" port="8091" contextpath="" server="jetty2">
+        <dubbo:parameter key="protocolProvider" value="simple"/>
+    </dubbo:protocol>
+
+    <!--dubbo 接口-->
+    <dubbo:protocol id="owl-dubbo" name="dubbo" port="20687"/>
+
+</beans>
