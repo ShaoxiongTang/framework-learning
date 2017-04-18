@@ -27,6 +27,7 @@
         <module>redisson-demo</module>
         <module>atomikos-demo</module>
         <module>oj-code</module>
+        <module>dubbo-demo</module>
     </modules>
 
     <profiles>
@@ -49,6 +50,16 @@
             <dependency>
                 <groupId>com.xiaomi.be</groupId>
                 <artifactId>oc-web.service</artifactId>
+                <version>${oc-web.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xiaomi.be</groupId>
+                <artifactId>oc-web.filter</artifactId>
+                <version>${oc-web.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xiaomi.be</groupId>
+                <artifactId>oc-web.dubbo</artifactId>
                 <version>${oc-web.version}</version>
             </dependency>
             <dependency>
