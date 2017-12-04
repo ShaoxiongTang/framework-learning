@@ -28,6 +28,7 @@
         <module>atomikos-demo</module>
         <module>oj-code</module>
         <module>dubbo-demo</module>
+        <module>spring-cloud</module>
     </modules>
 
     <profiles>
